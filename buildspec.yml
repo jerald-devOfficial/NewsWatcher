@@ -1,6 +1,8 @@
+version: 0.1
+
 phases:
   install:
-    commands: 
+    commands:
       - echo Installing Node Modules...
       - npm install
       - npm install --only=dev
@@ -14,7 +16,7 @@ phases:
   post_build:
     commands:
       - echo Final build, without devDependencies
-      - rm -rf node_modules
+      - rm -rf node_modules/
       - npm install
 artifacts:
   files:
