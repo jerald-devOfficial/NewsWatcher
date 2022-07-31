@@ -8,9 +8,13 @@
     "email": "spaueOfficial@gmail.com"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "zipForEB": "zip -r eb.zip build public routes package.json server.js .npmrc",
+    "test-API": "jest --runInBand --testTimeout 999999 --collectCoverage true test/api_endpoint.test.js",
+    "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.137.0",
     "async": "^3.2.4",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.2.0",
@@ -32,5 +36,15 @@
     "redux": "^4.2.0",
     "response-time": "^2.3.2",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "supertest": "^6.2.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   }
 }

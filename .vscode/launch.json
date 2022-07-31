@@ -1,0 +1,62 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/server.js"
+    },
+    {
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Debug Node",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/server.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Jest api_endpoint Tests",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--verbose",
+        "--runInBand",
+        "--detectOpenHandles",
+        "--no-cache",
+        "--testTimeout",
+        "999999",
+        "${workspaceFolder}/test/api_endpoint.test.js"
+      ],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
+      "outputCapture": "std",
+      "internalConsoleOptions": "openOnSessionStart",
+      "disableOptimisticBPs": true
+    },
+    {
+      "name": "Debug Jest React App Tests",
+      "type": "node",
+      "request": "launch",
+      "env": {
+        "CI": "true"
+      },
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
+      "args": [
+        "test",
+        "--runInBand",
+        "--no-cache",
+        "--testTimeout",
+        "999999"
+      ],
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "outputCapture": "std",
+      "internalConsoleOptions": "openOnSessionStart",
+      "disableOptimisticBPs": true
+    }
+  ]
+}

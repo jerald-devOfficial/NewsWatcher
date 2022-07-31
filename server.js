@@ -2,23 +2,23 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-const express = require('express'); // route handlers
-const path = require('path'); // populating the path property of the request
-const logger = require('morgan'); // HTTP request logging
-const responseTime = require('response-time'); // performance logging
-const helmet = require('helmet'); // security measures
-const rareLimit = require('express-rate-limit'); // IP based rate limiter
-const compression = require('compression'); // traffic compression
-const users = require('./routes/users');
-const session = require('./routes/session');
-const sharedNews = require('./routes/sharedNews');
-const homeNews = require('./routes/homeNews');
+var express = require('express'); // route handlers
+var path = require('path'); // populating the path property of the request
+var logger = require('morgan'); // HTTP request logging
+var responseTime = require('response-time'); // performance logging
+var helmet = require('helmet'); // security measures
+var rareLimit = require('express-rate-limit'); // IP based rate limiter
+var compression = require('compression'); // traffic compression
+var users = require('./routes/users');
+var session = require('./routes/session');
+var sharedNews = require('./routes/sharedNews');
+var homeNews = require('./routes/homeNews');
 
-const app = express();
+var app = express();
 app.enable('trust proxy');
 app.use(compression());
 
-const limiter = rateLimiter({
+const limiter = rareLimit({
   // DDoS attack protection
   windowMs: 1 * 60 * 1000, // 1 minute
   max: 2000, // limit each IP address per window
@@ -60,6 +60,28 @@ app.use(logger('dev'));
 // Parses a JSON body request payload and provides the 'body' property
 app.use(express.json());
 
+const db = {};
+const MongoClient = require('mongodb').MongoClient;
+
+//Use connect method to connect to the Server
+MongoClient.connect(process.env.MONGODB_CONNECT_URL, { useNewUrlParser: true, useUnifiedTopology: true, minPoolSize: 10, maxPoolSize: 100 }, (err, client) => {
+  if (err === undefined || err === null) {
+    db.client = client;
+    db.collection = client.db('newswatcherdb').collection('NewsWatcher');
+    console.log("Connected to MongoDB server");
+  } else {
+    console.log("Failed to connected to MongoDB server");
+    console.log(err);
+    process.exit(0);
+  }
+});
+
+// Set the database connection for middleware usage
+app.use((req, res, next) => {
+  req.db = db;
+  next();
+});
+
 // serving of the React app and other static content like images
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, 'build', 'index.html'))
@@ -69,37 +91,7 @@ app.get('/', (req, res) =>
 // CSS files and JS files
 app.use(express.static(path.join(__dirname, 'build')));
 
-const db = {};
 
-const MongoClient = require('mongodb').MongoClient;
-
-// Use connect method to connect to the Server
-MongoClient.connect(
-  process.env.MONGODB_CONNECT_URL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    minPoolSize: 10,
-    maxPoolSize: 100,
-  },
-  (err, client) => {
-    if (err == undefined || err == null) {
-      db.client = client;
-      db.collection.client.db('newswatcherdb').collection('newswatcher');
-      console.log('Connected to MongoDB server');
-    } else {
-      console.log('Failed to connect to MongoDB server');
-      console.log(err);
-      process.exit(0);
-    }
-  }
-);
-
-// Set the database connection for middleware usage
-app.use((req, res, next) => {
-  req.db = db;
-  next();
-});
 
 // Rest API routes
 app.use('/api/users', users);
@@ -109,7 +101,7 @@ app.use('/api/homenews', homeNews);
 
 // catch everything else and forward to error handler as a 404 to return
 app.use((req, res, next) => {
-  const err = new Error('Not found');
+  let err = new Error('Not found');
   err.status = 404;
   next(err);
 });
