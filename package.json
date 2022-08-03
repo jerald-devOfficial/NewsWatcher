@@ -1,6 +1,7 @@
 {
   "name": "newswatcher",
   "version": "0.0.0",
+  "private": true,
   "description": "NewsWatcher",
   "main": "server.js",
   "author": {
@@ -9,12 +10,18 @@
   },
   "scripts": {
     "start": "node server.js",
+    "start-react": "react-scripts start",
+    "build-react": "react-scripts build",
     "zipForEB": "zip -r eb.zip build public routes package.json server.js .npmrc",
+    "test-react": "react-scripts test --coverage --watchAll=false --env=jsdom",
     "test-API": "jest --runInBand --testTimeout 999999 --collectCoverage true test/api_endpoint.test.js",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
     "@aws-sdk/client-lambda": "^3.137.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0",
     "async": "^3.2.4",
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.2.0",
@@ -45,6 +52,18 @@
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }
