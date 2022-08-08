@@ -45,7 +45,6 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "jest": "^27.5.1",
     "supertest": "^6.2.4"
   },
   "eslintConfig": {
