@@ -1,5 +1,10 @@
 import { combineReducers } from "redux";
-import app from './app'
+import app from "./app";
+import homenews from "./homenews";
 
-const rootReducer = combineReducers({ app })
-export default rootReducer
+const rootReducer = combineReducers({
+  app,
+  homenews,
+});
+
+export default rootReducer;

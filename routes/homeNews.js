@@ -2,8 +2,8 @@
 
 const express = require('express');
 const router = express.Router();
-const cachedDoc = null;
-const timeStamp = process.hrtime();
+let cachedDoc = null;
+let timeStamp = process.hrtime();
 
 // Return all the Home Page news stories. Call the middleware first to verify we have a logged in user.
 router.get('/', function (req, res, next) {
