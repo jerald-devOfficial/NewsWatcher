@@ -34,7 +34,7 @@ const HomeNewsView = (props) => {
           });
         });
     }
-  }, []);
+  }, [dispatch, props, reduxState.isSSR]);
 
   if (reduxState.isLoading) {
     return <h1 data-testid="loading_id">Loading home page news...</h1>;

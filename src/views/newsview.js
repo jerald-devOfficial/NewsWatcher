@@ -45,7 +45,7 @@ const NewsView = (props) => {
           msg: `News fetch failed: ${error.message}`,
         });
       });
-  }, []);
+  }, [navigate, props]);
 
   const handleChangeFilter = (event) => {
     setSelectedIdx(parseInt(event.target.value, 10));

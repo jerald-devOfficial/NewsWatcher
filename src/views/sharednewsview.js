@@ -59,7 +59,7 @@ const SharedNewsView = (props) => {
           msg: `Shared News fetch failed: ${error.message}`,
         });
       });
-  }, []);
+  }, [navigate, props]);
 
   const handleOpenModal = (index, event) => {
     setSelectedStoryIdx(index);

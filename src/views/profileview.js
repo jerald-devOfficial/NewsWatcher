@@ -65,7 +65,7 @@ const ProfileView = (props) => {
           msg: `Profile fetch failed: ${error.message}`,
         });
       });
-  }, []);
+  }, [navigate, props]);
 
   const handleUnRegister = (event) => {
     const { dispatch } = props;
