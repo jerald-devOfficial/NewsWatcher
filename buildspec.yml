@@ -18,5 +18,5 @@ phases:
       - echo $CODEBUILD_BUILD_NUMBER
       - echo $CODEBUILD_SOURCE_VERSION
       - aws s3 cp eb.zip s3://elasticbeanstalk-ap-east-1-870258253080/serverProd.zip
-      - aws elasticbeanstalk create-application-version --application-name NewsWatcherProd --version-label "$CODEBUILD_BUILD_NUMBER" --source-bundle S3Bucket="elasticbeanstalk-ap-east-1-870258253080",S3Key="serverProd.zip"
-      - aws elasticbeanstalk update-environment --application-name NewsWatcherProd --environment-name NewsWatcherprod-env --version-label "$CODEBUILD_BUILD_NUMBER"
+      - aws elasticbeanstalk create-application-version --application-name newswatcher --version-label "$CODEBUILD_BUILD_NUMBER" --source-bundle S3Bucket="elasticbeanstalk-ap-east-1-870258253080",S3Key="serverProd.zip"
+      - aws elasticbeanstalk update-environment --application-name newswatcher --environment-name Newswatcher-env --version-label "$CODEBUILD_BUILD_NUMBER"
