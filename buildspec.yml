@@ -1,20 +1,22 @@
-version: 0.1
-
+version: 0.2
 phases:
-  install:
-    commands:
-      - echo Installing Node Modules...
-      - npm install
-  build:
-    commands:
-      - echo Build started on `date`
-      - echo Building React Web application
-      - npm run build-react
   post_build:
     commands:
-      - echo Final build, without devDependencies
+      - echo Build and install Lambda
+      - cd Lambda
       - rm -rf node_modules/
-      - npm install
-artifacts:
-  files:
-    - '**/*'
+      - npm install --production
+      - npm run zipLambda
+      - aws lambda update-function-code --function-name NYTStoriesMgmt --zip-file fileb://lambda.zip
+      - cd ..
+      - echo Building React app
+      - rm -rf node_modules/
+      - npm install --production
+      - npm run build-react
+      - echo Zip and deploy the node Elastic Beanstalk app
+      - npm run zipForEB
+      - echo $CODEBUILD_BUILD_NUMBER
+      - echo $CODEBUILD_SOURCE_VERSION
+      - aws s3 cp eb.zip s3://elasticbeanstalk-ap-east-1-870258253080/serverProd.zip
+      - aws elasticbeanstalk create-application-version --application-name NewsWatcherProd --version-label "$CODEBUILD_BUILD_NUMBER" --source-bundle S3Bucket="elasticbeanstalk-ap-east-1-870258253080",S3Key="serverProd.zip"
+      - aws elasticbeanstalk update-environment --application-name NewsWatcherProd --environment-name NewsWatcherprod-env --version-label "$CODEBUILD_BUILD_NUMBER"
